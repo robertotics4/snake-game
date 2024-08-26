@@ -2,6 +2,11 @@
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
+const score = document.querySelector('.score--value');
+const finalScore = document.querySelector('.final-score > span');
+const menu = document.querySelector('.menu-screen');
+const buttonPlay = document.querySelector('.btn-play')
+
 // Configurations
 const audio = new Audio('../assets/beep.mp3');
 const gameConfigurations = {
@@ -21,7 +26,11 @@ const gameConfigurations = {
     shadowSize: 6,
     eatAudio: audio
   },
+  score: {
+    increment: 10
+  }
 };
+let scorePoints = 0;
 
 // functions
 function randomNumber(min, max) {
@@ -129,6 +138,7 @@ function checkEat(snake, food, gameConfigurations) {
   const head = snake[snake.length - 1];
 
   if (head.x === food.x && head.y === food.y) {
+    incrementScore(gameConfigurations);
     snake.push(head);
     foodConfigurations.eatAudio.play();
 
@@ -148,8 +158,22 @@ function checkCollision(snake, gameConfigurations) {
   });
 
   if (wallCollision || selfCollision) {
-    alert("Você perdeu!")
+    gameOver();
   }
+}
+
+function gameOver() {
+  direction = undefined;
+
+  menu.style.display = 'flex';
+  finalScore.innerText = score.innerText;
+  canvas.style.filter = 'blur(2px)';
+}
+
+function incrementScore(gameConfigurations) {
+  const { score: scoreConfigurations } = gameConfigurations;
+  scorePoints += scoreConfigurations.increment;
+  score.innerText = scorePoints;
 }
 
 function runGameLoop(gameConfigurations) {
@@ -171,16 +195,14 @@ function runGameLoop(gameConfigurations) {
   }, generalVelocity);
 }
 
-
 // define objects
 let direction, loopId;
-const snake = [gameConfigurations.snake.initialPosition];
+let snake = [gameConfigurations.snake.initialPosition];
 const food = {
   x: randomPosition(gameConfigurations),
   y: randomPosition(gameConfigurations),
   color: randomColor()
-}
-
+};
 
 runGameLoop(gameConfigurations);
 
@@ -202,4 +224,13 @@ document.addEventListener('keydown', event => {
   if (key === 'ArrowUp' && direction !== 'down') {
     direction = 'up';
   }
+});
+
+buttonPlay.addEventListener('click', event => {
+  scorePoints = 0;
+  score.innerText = '00';
+  menu.style.display = 'none';
+  canvas.style.filter = 'none';
+
+  snake = [gameConfigurations.snake.initialPosition];
 });
