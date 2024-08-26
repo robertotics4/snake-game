@@ -108,6 +108,31 @@ function drawFood(food, gameConfigurations) {
   ctx.shadowBlur = 0;
 }
 
+function recriateFood(food, gameConfigurations) {
+  let x = randomPosition(gameConfigurations);
+  let y = randomPosition(gameConfigurations);
+
+  while (snake.find(position => position.x === x && position.y === y)) {
+    x = randomPosition(gameConfigurations);
+    y = randomPosition(gameConfigurations);
+  }
+
+  food.x = x;
+  food.y = y;
+  food.color = randomColor();
+}
+
+function checkEat(snake, food, gameConfigurations) {
+  const head = snake[snake.length - 1];
+
+  if (head.x === food.x && head.y === food.y) {
+    snake.push(head);
+
+    recriateFood(food, gameConfigurations)
+  }
+}
+
+
 function runGameLoop(gameConfigurations) {
   const { canvasSize, generalVelocity } = gameConfigurations;
 
@@ -119,11 +144,13 @@ function runGameLoop(gameConfigurations) {
   drawFood(food, gameConfigurations);
   moveSnake(snake, gameConfigurations);
   drawSnake(snake, gameConfigurations);
+  checkEat(snake, food, gameConfigurations);
 
   loopId = setTimeout(() => {
     runGameLoop(gameConfigurations)
   }, generalVelocity);
 }
+
 
 // define objects
 let direction, loopId;
@@ -132,7 +159,7 @@ const food = {
   x: randomPosition(gameConfigurations),
   y: randomPosition(gameConfigurations),
   color: randomColor()
-};
+}
 
 
 runGameLoop(gameConfigurations);
