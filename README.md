@@ -25,7 +25,7 @@ git clone https://github.com/robertotics4/snake-game
 2. Navegue até o diretório do projeto:
 
 ```bash
-cd jogo-da-cobrinha
+cd snake-game
 ```
 
 3. Abra o arquivo `index.html` no seu navegador web para iniciar o jogo.
@@ -42,7 +42,7 @@ Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICE
 
 ## 📷 Screenshot
 
-![Screenshot do Jogo](screenshot.png)
+![Screenshot do Jogo](public/screenshot.png)
 
 ## 🙌 Agradecimentos
 
