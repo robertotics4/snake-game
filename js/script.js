@@ -3,10 +3,11 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 // Configurations
+const audio = new Audio('../assets/beep.mp3');
 const gameConfigurations = {
   canvasSize: canvas.width,
   rectSize: 30,
-  generalVelocity: 300,
+  generalVelocity: 100,
   grid: {
     lineWidth: 1,
     lineColor: '#191919'
@@ -17,8 +18,9 @@ const gameConfigurations = {
     initialPosition: { x: 270, y: 240 }
   },
   food: {
-    shadowSize: 6
-  }
+    shadowSize: 6,
+    eatAudio: audio
+  },
 };
 
 // functions
@@ -123,12 +125,14 @@ function recriateFood(food, gameConfigurations) {
 }
 
 function checkEat(snake, food, gameConfigurations) {
+  const { food: foodConfigurations } = gameConfigurations;
   const head = snake[snake.length - 1];
 
   if (head.x === food.x && head.y === food.y) {
     snake.push(head);
+    foodConfigurations.eatAudio.play();
 
-    recriateFood(food, gameConfigurations)
+    recriateFood(food, gameConfigurations);
   }
 }
 
