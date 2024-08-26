@@ -6,11 +6,9 @@ const ctx = canvas.getContext('2d');
 const defaultCanvasSize = 600;
 const defaultRectSize = 30;
 const defaultGameVelocity = 300;
+const initialPosition = { x: 270, y: 240 };
 let direction, loopId;
-const snake = [
-  { x: 200, y: 200 },
-  { x: 230, y: 200 },
-];
+const snake = [initialPosition];
 
 function drawnSnake(snake, rectSize) {
   ctx.fillStyle = "#ddd";
@@ -59,3 +57,23 @@ function runGameLoop() {
 }
 
 runGameLoop();
+
+document.addEventListener('keydown', event => {
+  const { key } = event;
+
+  if (key === 'ArrowRight' && direction !== 'left') {
+    direction = 'right';
+  }
+
+  if (key === 'ArrowLeft' && direction !== 'right') {
+    direction = 'left';
+  }
+
+  if (key === 'ArrowDown' && direction !== 'up') {
+    direction = 'down';
+  }
+
+  if (key === 'ArrowUp' && direction !== 'down') {
+    direction = 'up';
+  }
+});
