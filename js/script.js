@@ -6,11 +6,11 @@ const ctx = canvas.getContext('2d');
 const defaultCanvasSize = 600;
 const defaultRectSize = 30;
 const defaultGameVelocity = 300;
+let direction, loopId;
 const snake = [
   { x: 200, y: 200 },
   { x: 230, y: 200 },
 ];
-let direction;
 
 function drawnSnake(snake, rectSize) {
   ctx.fillStyle = "#ddd";
@@ -49,12 +49,13 @@ function moveSnake(snake, rectSize) {
 }
 
 function runGameLoop() {
+  clearInterval(loopId);
   ctx.clearRect(0, 0, defaultCanvasSize, defaultCanvasSize);
 
   moveSnake(snake, defaultRectSize);
   drawnSnake(snake, defaultRectSize);
 
-  setTimeout(() => { runGameLoop() }, defaultGameVelocity);
+  loopId = setTimeout(() => { runGameLoop() }, defaultGameVelocity);
 }
 
 runGameLoop();
