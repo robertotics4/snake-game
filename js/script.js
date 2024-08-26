@@ -3,23 +3,44 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 // Configurations
-const defaultCanvasSize = 600;
+const defaultCanvasSize = canvas.width;
 const defaultRectSize = 30;
 const defaultGameVelocity = 300;
+const defaultBodySnakeColor = '#ddd';
+const defaultHeadSnakeColor = 'white';
+const defaultGridLineWidth = 1;
+const defaultGridLineColor = '#191919';
 const initialPosition = { x: 270, y: 240 };
 let direction, loopId;
 const snake = [initialPosition];
 
-function drawnSnake(snake, rectSize) {
-  ctx.fillStyle = "#ddd";
+function drawSnake(snake, rectSize) {
+  ctx.fillStyle = defaultBodySnakeColor;
 
   snake.forEach((position, index) => {
     if (index === snake.length - 1) {
-      ctx.fillStyle = "white";
+      ctx.fillStyle = defaultHeadSnakeColor;
     }
 
     ctx.fillRect(position.x, position.y, rectSize, rectSize);
   });
+}
+
+function drawGrid(gridLineWidth, gridLineColor, canvasSize) {
+  ctx.lineWidth = gridLineWidth;
+  ctx.strokeStyle = gridLineColor;
+
+  for (let i = 30; i < canvasSize; i += 30) {
+    ctx.beginPath();
+    ctx.lineTo(i, 0);
+    ctx.lineTo(i, canvasSize);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.lineTo(0, i);
+    ctx.lineTo(600, i);
+    ctx.stroke();
+  }
 }
 
 function moveSnake(snake, rectSize) {
@@ -48,10 +69,11 @@ function moveSnake(snake, rectSize) {
 
 function runGameLoop() {
   clearInterval(loopId);
-  ctx.clearRect(0, 0, defaultCanvasSize, defaultCanvasSize);
 
+  ctx.clearRect(0, 0, defaultCanvasSize, defaultCanvasSize);
+  drawGrid(defaultGridLineWidth, defaultGridLineColor, defaultCanvasSize);
   moveSnake(snake, defaultRectSize);
-  drawnSnake(snake, defaultRectSize);
+  drawSnake(snake, defaultRectSize);
 
   loopId = setTimeout(() => { runGameLoop() }, defaultGameVelocity);
 }
