@@ -136,6 +136,21 @@ function checkEat(snake, food, gameConfigurations) {
   }
 }
 
+function checkCollision(snake, gameConfigurations) {
+  const { canvasSize, rectSize } = gameConfigurations;
+  const head = snake[snake.length - 1];
+  const canvasLimit = canvasSize - rectSize;
+  const neckIndex = snake.length - 2;
+
+  const wallCollision = head.x < 0 || head.x > canvasLimit || head.y < 0 || head.y > canvasLimit;
+  const selfCollision = snake.find((position, index) => {
+    return index < neckIndex && position.x === head.x && position.y === head.y;
+  });
+
+  if (wallCollision || selfCollision) {
+    alert("Você perdeu!")
+  }
+}
 
 function runGameLoop(gameConfigurations) {
   const { canvasSize, generalVelocity } = gameConfigurations;
@@ -149,6 +164,7 @@ function runGameLoop(gameConfigurations) {
   moveSnake(snake, gameConfigurations);
   drawSnake(snake, gameConfigurations);
   checkEat(snake, food, gameConfigurations);
+  checkCollision(snake, gameConfigurations);
 
   loopId = setTimeout(() => {
     runGameLoop(gameConfigurations)
